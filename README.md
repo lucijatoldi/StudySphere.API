@@ -5,7 +5,7 @@ StudySphere API is a backend service for a study room booking system, built with
 
 ---
 
-## ? Key Features
+## ✨ Key Features
 
 - **Full CRUD Operations:** Complete Create, Read, Update, and Delete functionality for both `StudyRooms` and `Users`.
 - **Intelligent Reservation System:**
@@ -24,7 +24,7 @@ StudySphere API is a backend service for a study room booking system, built with
 
 ---
 
-## ??? Tech Stack
+## 🛠️ Tech Stack
 
 - **Framework:** ASP.NET Core 9
 - **Language:** C#
@@ -35,7 +35,7 @@ StudySphere API is a backend service for a study room booking system, built with
 
 ---
 
-## ?? Getting Started
+## 🚀 Getting Started
 
 To get a local copy up and running, follow these steps.
 
