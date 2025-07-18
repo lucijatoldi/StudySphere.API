@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using StudySphere.API.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this using directive
+using StudySphere.API.Data;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,10 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 builder.Services.AddControllers(); // Dodajemo podršku za kontrolere (trebat æe nam kasnije)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // OVO JE NOVA LINIJA IZ SWASHBUCKLE PAKETA
+
+// Dodavanje FluentValidation servisa
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 var app = builder.Build();
 
