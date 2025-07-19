@@ -15,6 +15,7 @@
 # secrets
 secrets.json
 appsettings.Development.json
+.env
 
 # Build results
 [Dd]ebug/
