@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudySphere.API.Data;
 using StudySphere.API.Models;
+using StudySphere.API.DTOs;
 
 namespace StudySphere.API.Controllers
 {
@@ -10,33 +12,38 @@ namespace StudySphere.API.Controllers
     public class StudyRoomsController : ControllerBase
     {
         private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
 
-        public StudyRoomsController(ApiDbContext context)
+        public StudyRoomsController(ApiDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/StudyRooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudyRoom>>> GetStudyRooms()
+        public async Task<ActionResult<IEnumerable<StudyRoomDto>>> GetStudyRooms()
         {
-            var rooms = await _context.StudyRooms.ToListAsync();
-            return Ok(rooms);
+            var roomsFromDb = await _context.StudyRooms.ToListAsync();
+            var roomsDto = _mapper.Map<IEnumerable<StudyRoomDto>>(roomsFromDb);
+            return Ok(roomsDto);
         }
 
         // GET: api/StudyRooms/5
         // Dohvaća jednu specifičnu sobu po ID-u
         [HttpGet("{id}")]
-        public async Task<ActionResult<StudyRoom>> GetStudyRoom(int id)
+        public async Task<ActionResult<StudyRoomDto>> GetStudyRoom(int id)
         {
-            var studyRoom = await _context.StudyRooms.FindAsync(id);
+            var studyRoomFromDb = await _context.StudyRooms.FindAsync(id);
 
-            if (studyRoom == null)
+            if (studyRoomFromDb == null)
             {
                 return NotFound(); 
             }
 
-            return Ok(studyRoom);
+            var studyRoomDto = _mapper.Map<IEnumerable<StudyRoomDto>>(studyRoomFromDb);
+
+            return Ok(studyRoomDto);
         }
 
         // POST: api/StudyRooms

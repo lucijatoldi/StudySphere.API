@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StudySphere.API.Data;
 using StudySphere.API.Models;
 using StudySphere.API.DTOs;
+using AutoMapper;
 
 
 namespace StudySphere.API.Controllers
@@ -12,20 +13,27 @@ namespace StudySphere.API.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ReservationsController(ApiDbContext context)
+        public ReservationsController(ApiDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;   
         }
 
         // GET: api/Reservations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
+        public async Task<ActionResult<IEnumerable<ReservationDto>>> GetReservations()
         {
-            return await _context.Reservations
-                                 .Include(r => r.StudyRoom)
-                                 .Include(r => r.User)
-                                 .ToListAsync();
+            // Dohvatimo pune objekte iz baze, a zatim pozovemo `_mapper.Map` i kažemo mu:
+            // "Pretvori mi ovu listu `Reservation` objekata u listu `ReservationDto` objekata."
+            var reservationsFromDb =  await _context.Reservations
+                                            .Include(r => r.StudyRoom)
+                                            .Include(r => r.User)
+                                            .ToListAsync();
+            var reservationsDto = _mapper.Map<IEnumerable<ReservationDto>>(reservationsFromDb);
+
+            return Ok(reservationsDto);
         }
 
         // POST: api/Reservations

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this using directive
+using Npgsql.EntityFrameworkCore.PostgreSQL; 
 using StudySphere.API.Data;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -11,56 +11,28 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
-builder.Services.AddControllers(); // Dodajemo podršku za kontrolere (trebat æe nam kasnije)
+builder.Services.AddControllers(); 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(); // OVO JE NOVA LINIJA IZ SWASHBUCKLE PAKETA
+builder.Services.AddSwaggerGen(); 
 
 // Dodavanje FluentValidation servisa
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+// Dodavanje AutoMapper servisa
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(); // OVO JE NOVA LINIJA
-    app.UseSwaggerUI(); // OVO JE NOVA LINIJA koja kreira UI
+    app.UseSwagger(); 
+    app.UseSwaggerUI(); 
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
-app.MapControllers(); // Govorimo aplikaciji da koristi kontrolere
-
-// --- OVAJ DIO SADA MOŽEMO ZAKOMENTIRATI ILI OBRISATI ---
-// Mi æemo endpointove definirati u posebnim datotekama (kontrolerima),
-// a ne direktno ovdje.
-/*
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
-*/
-
+app.MapControllers(); 
 app.Run();

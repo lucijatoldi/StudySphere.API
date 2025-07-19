@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudySphere.API.Data;
 using StudySphere.API.Models;
+using StudySphere.API.DTOs;
+using AutoMapper;
 
 namespace StudySphere.API.Controllers
 {
@@ -11,32 +13,37 @@ namespace StudySphere.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
 
-        public UsersController(ApiDbContext context)
+        public UsersController(ApiDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            return Ok(users);
+            var usersFromDb = await _context.Users.ToListAsync();
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(usersFromDb);
+            return Ok(usersDto);
         }
 
         // GET: api/Users/id
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser(int id)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var userFromDb = await _context.Users.FindAsync(id);
 
-            if (user == null)
+            if (userFromDb == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            var userDto = _mapper.Map<IEnumerable<UserDto>>(userFromDb);
+
+            return Ok(userDto);
         }
 
         // POST: api/Users
