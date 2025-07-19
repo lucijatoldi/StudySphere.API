@@ -25,6 +25,13 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
+// Automatska primjena migracija pri pokretanju
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 app.UseSwagger(); 
 app.UseSwaggerUI(); 

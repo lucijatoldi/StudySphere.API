@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Naö API servis
   api:
     build:
       context: .
@@ -11,15 +10,20 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Host=db;Database=studysphere_db;Username=postgres;Password=${POSTGRES_PASSWORD}
     depends_on:
-      - db
+        db:
+          condition: service_healthy
 
-  # Naö servis za bazu podataka
   db:
-    image: postgres:15 # Koristimo sluûbenu PostgreSQL sliku, verzija 15
+    image: postgres:15 # Koristimo slu≈æbenu PostgreSQL sliku, verzija 15
     restart: always
     environment:
       - POSTGRES_DB=studysphere_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432" # Opcionalno: ako ûeliö spajati se na bazu izvana (npr. pgAdminom)
+      - "5432:5432" # Opcionalno: ako ≈æeli≈° spajati se na bazu izvana (npr. pgAdminom)
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
