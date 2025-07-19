@@ -37,15 +37,22 @@ StudySphere API is a backend service for a study room booking system, built with
 
 ## 🚀 Getting Started
 
-To get a local copy up and running, follow these steps.
+There are two ways to run this project:
 
-### Prerequisites
+1.  **Using Docker Compose (Recommended):** The easiest way to get up and running.
+2.  **Manually (Local Development):** If you prefer to manage the database on your own machine.
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download) 
-- [PostgreSQL](https://www.postgresql.org/download/)
-- An API testing tool like [Postman](https://www.postman.com/downloads/) or use the built-in Swagger UI.
+---
 
-### Installation & Setup
+### Method 1: Running with Docker Compose (Recommended)
+
+This method will automatically build the API, create a PostgreSQL database in a separate container, and run the entire application stack with a single command.
+
+#### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+
+#### Steps
 
 1.  **Clone the repository:**
     ```bash
@@ -53,30 +60,56 @@ To get a local copy up and running, follow these steps.
     cd StudySphere.API
     ```
 
-2.  **Set up the database:**
-    - Open PostgreSQL (e.g., using `pgAdmin`).
-    - Create a new, empty database named `studysphere_db`.
-
-3.  **Configure the connection string:**
-    - In the project root, open `appsettings.json`.
-    - Modify the `DefaultConnection` string with your PostgreSQL username and password:
-      ```json
-      "ConnectionStrings": {
-        "DefaultConnection": "Host=localhost;Database=studysphere_db;Username=postgres;Password=YOUR_PASSWORD"
-      }
+2.  **Create an environment file:**
+    - Create a file named `.env` in the root directory of the project.
+    - Add the following line to the file, replacing `your_super_secret_password` with a password of your choice. This password will be used for the PostgreSQL container.
+      ```
+      POSTGRES_PASSWORD=your_super_secret_password
       ```
 
-4.  **Apply database migrations:**
-    - Open the project in Visual Studio or use the terminal.
-    - Run the following command to apply all existing migrations and create the database schema:
+3.  **Launch the application:**
+    - Run the following command from the root directory:
       ```bash
-      dotnet ef database update
+      docker-compose up --build
       ```
+    - The first time you run this, it will download the necessary Docker images and build the API image. Please be patient.
+    - The API will automatically apply database migrations on startup.
 
-5.  **Run the application:**
-    - You can run the project directly from Visual Studio by pressing F5 or by using the .NET CLI:
+4.  **You're ready!**
+    - The API will be available at `http://localhost:8080`.
+    - The interactive Swagger UI will be available at `http://localhost:8080/swagger`.
+    - To stop the application, press `Ctrl + C` in the terminal and then run `docker-compose down`.
+
+---
+
+### Method 2: Running Manually on Local Machine
+
+Use this method if you want to run the API directly using the .NET SDK and connect to a PostgreSQL instance running on your host machine.
+
+#### Prerequisites
+
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download) (or your version)
+- [PostgreSQL](https://www.postgresql.org/download/)
+
+#### Steps
+
+1.  **Clone and set up the database** as described in the Docker Compose method.
+2.  **Configure User Secrets:**
+    - This project uses User Secrets to store the connection string for local development.
+    - Initialize user secrets from the project directory:
+      ```bash
+      dotnet user-secrets init
+      ```
+    - Set the connection string (replace with your actual password):
+      ```bash
+      dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Database=studysphere_db;Username=postgres;Password=YOUR_PASSWORD"
+      ```
+3.  **Apply database migrations:**
+    ```bash
+    dotnet ef database update
+    ```
+4.  **Run the application:**
+    - You can run the project from Visual Studio (F5) or using the .NET CLI:
       ```bash
       dotnet run
       ```
-    - The API will be available at the URLs specified in `Properties/launchSettings.json` (e.g., `https://localhost:7123`).
-    - The interactive Swagger UI will be available at `/swagger`.
