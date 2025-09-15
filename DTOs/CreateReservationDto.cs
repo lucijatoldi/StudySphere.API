@@ -4,9 +4,9 @@ namespace StudySphere.API.DTOs
 {
     public class CreateReservationDto
     {
-        [DefaultValue("2025-11-25T10:00:00")]
+        [DefaultValue("2026-10-15T09:00:00.094Z")]
         public DateTime StartTime { get; set; }
-        [DefaultValue("2025-11-25T11:00:00")]
+        [DefaultValue("2026-10-15T10:00:00.094Z")]
         public DateTime EndTime { get; set; }
         [DefaultValue(1)]
         public int StudyRoomId { get; set; }
