@@ -3,12 +3,32 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using StudySphere.API.Data;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Povezivanje s bazom podataka
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (Uri.IsWellFormedUriString(connectionString, UriKind.Absolute))
+{
+    var databaseUri = new Uri(connectionString);
+    var userInfo = databaseUri.UserInfo.Split(':');
+
+    var builderDb = new Npgsql.NpgsqlConnectionStringBuilder
+    {
+        Host = databaseUri.Host,
+        Port = databaseUri.Port,
+        Username = userInfo[0],
+        Password = userInfo[1],
+        Database = databaseUri.LocalPath.TrimStart('/'),
+        SslMode = Npgsql.SslMode.Prefer, 
+        TrustServerCertificate = true 
+    };
+    connectionString = builderDb.ToString();
+}
+
 builder.Services.AddDbContext<ApiDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllers(); 
