@@ -2,6 +2,15 @@
 
 StudySphere API is a backend service for a study room booking system, built with ASP.NET Core. It provides a complete RESTful API for managing study rooms, users, and handling reservations with conflict detection.
 
+---
+
+## 🚀 Live Demo
+
+**You can access and test the live version of this API, including the Swagger UI, at the following URL:**
+
+### [https://studysphere-api.onrender.com/swagger](https://studysphere-api.onrender.com/swagger)
+
+*Note: The free instance may go to sleep after a period of inactivity. The first request after a pause might take 20-30 seconds to wake up the service.*
 
 ---
 
@@ -32,17 +41,14 @@ StudySphere API is a backend service for a study room booking system, built with
 - **ORM:** Entity Framework Core
 - **API Documentation:** Swashbuckle (Swagger)
 - **Validation:** FluentValidation
+- **Containerization:** Docker, Docker Compose
+- **Deployment:** Render
 
 ---
 
-## 🚀 Getting Started
+## 🏃‍♂️ Getting Started (Local Setup)
 
-There are two ways to run this project:
-
-1.  **Using Docker Compose (Recommended):** The easiest way to get up and running.
-2.  **Manually (Local Development):** If you prefer to manage the database on your own machine.
-
----
+If you wish to run the project locally, there are two ways to do it.
 
 ### Method 1: Running with Docker Compose (Recommended)
 
@@ -93,10 +99,10 @@ Use this method if you want to run the API directly using the .NET SDK and conne
 
 #### Steps
 
-1.  **Clone and set up the database** as described in the Docker Compose method.
+1.  **Clone the repository and set up a local PostgreSQL database** named `studysphere_db`.
 2.  **Configure User Secrets:**
     - This project uses User Secrets to store the connection string for local development.
-    - Initialize user secrets from the project directory:
+    - From the project directory (`StudySphere.API`), initialize user secrets:
       ```bash
       dotnet user-secrets init
       ```
