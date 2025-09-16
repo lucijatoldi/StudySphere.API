@@ -32,7 +32,7 @@ namespace StudySphere.API.Controllers
 
         // GET: api/Users/id
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var userFromDb = await _context.Users.FindAsync(id);
 
@@ -41,7 +41,7 @@ namespace StudySphere.API.Controllers
                 return NotFound();
             }
 
-            var userDto = _mapper.Map<IEnumerable<UserDto>>(userFromDb);
+            var userDto = _mapper.Map<UserDto>(userFromDb);
 
             return Ok(userDto);
         }

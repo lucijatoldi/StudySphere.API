@@ -41,7 +41,7 @@ namespace StudySphere.API.Controllers
                 return NotFound(); 
             }
 
-            var studyRoomDto = _mapper.Map<IEnumerable<StudyRoomDto>>(studyRoomFromDb);
+            var studyRoomDto = _mapper.Map<StudyRoomDto>(studyRoomFromDb);
 
             return Ok(studyRoomDto);
         }
